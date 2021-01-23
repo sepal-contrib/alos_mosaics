@@ -1,0 +1,35 @@
+{
+    "not_translated": "this message only exist in the en dict",
+    "app": {
+        "title": "ALOS K&C mosaics",
+        "footer": "SEPAL \u00A9 {}",
+        "drawer_item": {
+            "aoi": "AOI selection",
+            "process": "Date selection",
+            "result": "Results",
+            "about": "About"
+        }
+    },
+    "process": {
+        "small_slider": "{} is not big enough, please provide a value > to 50",
+        "end_computation": "Computation complete",
+        "alos_mosaic": "ALOS mosaic",
+        "hist_title": "Histogram",
+        "treecover2000": "Treecover 2000",
+        "healthy_veg": "Healthy vegetation",
+        "green": "Green",
+        "green_update": "Green updated",
+        "gain_loss": "Gain & Loss",
+        "slider": "Select Year",
+        "textfield": "GEE Asset Basename",
+        "title": "Process tile",
+        "no_aoi": "Please provide an AOI",
+        "no_slider": "Please provide a year for the mosaic",
+        "no_textfield": "Please provide a GEE Asset basename",
+        "gee_btn": "Generate EE Asset"
+    },
+    "result": {
+        "title": "Results",
+        "no_result": "No result to display yet"
+    }
+}
