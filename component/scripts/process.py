@@ -21,7 +21,9 @@ def create_mosaic(output, ee_aoi, year):
 
     # GEE script
     my_year    = str(year)
-      
+    
+    ### NEED TO ADD HERE THE SPECKLE FILTERING AND CALIBRATION
+         
     collection = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/SAR').filterBounds(ee_aoi)#.map(applyCalibration).map(setresample)
     dataset    = collection.filter(ee.Filter.date(my_year + '-01-01', my_year + '-12-31')).first().clip(ee_aoi)
      
@@ -67,6 +69,7 @@ def display_result(ee_aoi,dataset):
 
 def export_result(dataset,asset_name):
         
+        ### NEED TO ADD HERE THE EXPORT TO ASSET FUNCTION
     return asset_name
     
     
