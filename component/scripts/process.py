@@ -64,8 +64,7 @@ def export_result(aoi_io, dataset, filename, output):
         'assetId': str(asset_name),
         'scale': 30, # we need to change this scale for big surfaces 
         'region': aoi_io.get_aoi_ee().geometry(),
-        'pyramidingPolicy': {'.default': 'sample'},
-        'maxPixels': 1e12
+        'maxPixels': 1e13
     }
     
     task = ee.batch.Export.image.toAsset(**task_config)
