@@ -1,5 +1,5 @@
-# minimum year for the alos images 
+# minimum year for the ALOS images 
 min_year = 2015
 
-# maximum year for the alos images 
+# maximum year for the ALOS images 
 max_year = 2018

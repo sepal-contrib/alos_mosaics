@@ -1,5 +1,4 @@
-# It is strongly suggested to use a separate file to define the tiles of your process and then call them in your notebooks. 
-# it will help you to have control over their fonctionalities using object oriented programming
+### TILE SHOWING THE RESULTS
 
 from sepal_ui import sepalwidgets as sw
 from sepal_ui import mapping as sm

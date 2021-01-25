@@ -7,9 +7,10 @@ class Process:
     def __init__(self):
         
         # set up your inputs
-        self.year = None
-        self.asset = None
+        self.year   = None
+        self.asset  = None
+        self.filter = None
     
-        # set up your output
+        # set up your outputs
         self.asset_id = None
-        self.dataset = None
+        self.dataset  = None

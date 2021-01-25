@@ -8,6 +8,7 @@ import pandas as pd
 import geemap
 import ee
 import ipyvuetify as v
+
 from matplotlib import pyplot as plt
 from ipywidgets import Output
 
@@ -16,32 +17,44 @@ from sepal_ui.mapping import SepalMap
 from component.message import ms
 from component import parameter as pm
 
+from .filters import *
+
 ee.Initialize()
 
-def create_mosaic(ee_aoi, year, output):
-
-    # GEE script
-    my_year = str(year)
+def alos_kc_mosaic(ee_aoi, year,output,mt_speck):
     
-    ### NEED TO ADD HERE THE SPECKLE FILTERING AND CALIBRATION
-         
-    collection = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/SAR').filterBounds(ee_aoi)#.map(applyCalibration).map(setresample)
-    dataset    = collection.filter(ee.Filter.date(f'{year}-01-01', f'{year}-12-31')).first().clip(ee_aoi)
-     
+    # we call the collection and apply the pre-processing steps
+    collection = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/SAR') \
+                    .filterBounds(ee_aoi) \
+                    .map(applyCalibration) \
+                    .map(setresample)
+
+    # if we choose to speckle filter
+    if mt_speck:
+        image = mtDespeck(collection, 30, 'meters').filter(ee.Filter.date(f'{year}-01-01', f'{year}-12-31')).first().clip(ee_aoi)          
+    else: 
+        image = collection.filter(ee.Filter.date(f'{year}-01-01', f'{year}-12-31')).first().clip(ee_aoi)
+        
+    # to dB scale
+    image = toDb(ee.Image(image))
+    
+    # add ratio band
+    image = image.addBands(image.select('HH').subtract(image.select('HV')).rename('HHHV_ratio'));
+    
     # fake the loading of something so that the user see the btn spining
-    time.sleep(1)
+    time.sleep(0.1)
     
     # let the user know that you managed to do something
     output.add_live_msg(ms.process.end_computation, 'success')
     
-    return dataset
+    return image
 
 def display_result(ee_aoi,dataset, m):
         
     # AOI borders in blue 
     empty   = ee.Image().byte()
     outline = empty.paint(featureCollection = ee_aoi, color = 1, width = 3)
-    
+   
     # Zoom to AOI
     m.zoom_ee_object(ee_aoi.geometry())
     
