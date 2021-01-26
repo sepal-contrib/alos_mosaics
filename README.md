@@ -1,4 +1,6 @@
 ## Extract ALOS mosaics
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 Module using the `sepal_ui` framework and an interactive **Voila** dashboard to extract ALOS K&C mosaics 
 
