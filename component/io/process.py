@@ -10,6 +10,9 @@ class Process:
         self.year   = None
         self.asset  = None
         self.filter = None
+        self.rfdi = None
+        self.ls_mask = None
+        self.dB = None
     
         # set up your outputs
         self.asset_id = None

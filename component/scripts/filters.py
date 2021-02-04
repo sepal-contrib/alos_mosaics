@@ -21,6 +21,7 @@ def applyCalibration(image):
     return image
 
 def mtDespeck(images, radius, units):
+    
     def mapMeanSpace(image):
         reducer = ee.Reducer.mean()
         kernel = ee.Kernel.square(radius, units)

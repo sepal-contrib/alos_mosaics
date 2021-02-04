@@ -25,12 +25,30 @@ class ProcessTile(sw.Tile):
         self.year   = v.Select(
             label   = ms.process.slider,
             v_model = None,
-            items   = [i for i in range(pm.max_year, pm.min_year-1, -1)]
+            items   = pm.years
         )
         
-        self.filter = v.Switch(
+        self.filter = v.Select(
+            label   = ms.process.speckle,
+            v_model = None,
+            items = pm.speckle_filters            
+        )
+        
+        self.rfdi = v.Switch(
             class_  = "ml-5",
-            label   = ms.process.switch,
+            label   = ms.process.rfdi,
+            v_model = True
+        )
+        
+        self.ls_mask = v.Switch(
+            class_  = "ml-5",
+            label   = ms.process.ls_mask,
+            v_model = True
+        )
+        
+        self.dB = v.Switch(
+            class_  = "ml-5",
+            label   = ms.process.dB,
             v_model = True
         )
         
@@ -48,7 +66,10 @@ class ProcessTile(sw.Tile):
         self.output = sw.Alert() \
             .bind(self.year, self.io, 'year')  \
             .bind(self.asset, self.io, 'asset')\
-            .bind(self.filter, self.io, 'filter')
+            .bind(self.filter, self.io, 'speckle')\
+            .bind(self.rfdi, self.io, 'rfdi')\
+            .bind(self.ls_mask, self.io, 'ls_mask')\
+            .bind(self.dB, self.io, 'dB')
         
         # to launch the process you'll need a btn 
         # here it is as a special sw widget (the message and the icon can also be customized see sepal_ui widget doc)
@@ -58,7 +79,7 @@ class ProcessTile(sw.Tile):
         super().__init__(
             id_    = "process_widget", # the id will be used to make the Tile appear and disapear
             title  = ms.process.title, # the Title will be displayed on the top of the tile
-            inputs = [self.year,self.asset,self.filter],
+            inputs = [self.year,self.asset,self.filter, self.rfdi, self.ls_mask, self.dB],
             btn    = self.btn,
             output = self.output
         )
@@ -82,11 +103,14 @@ class ProcessTile(sw.Tile):
         try:
             
             # Create the mosaic
-            dataset = scripts.alos_kc_mosaic(
+            dataset = scripts.create(
                 self.aoi_io.get_aoi_ee(),
                 self.io.year,
                 self.output,
-                self.io.filter
+                speckle_filter=self.io.filter,
+                add_rfdi=self.io.rfdi,
+                ls_mask=self.io.ls_mask,
+                db=self.io.dB
             ) 
             
             # Display the map

@@ -21,7 +21,7 @@ from .filters import *
 
 ee.Initialize()
 
-def alos_kc_mosaic(ee_aoi, year,output,mt_speck):
+def alos_kc_mosaic(ee_aoi, year, output, mt_speck):
     
     # we call the collection and apply the pre-processing steps
     collection = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/SAR') \
