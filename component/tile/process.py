@@ -52,10 +52,10 @@ class ProcessTile(sw.Tile):
             v_model = True
         )
         
-        self.asset  = v.TextField(
-            label   = ms.process.textfield,
-            v_model = None
-        )
+        #self.asset  = v.TextField(
+        #    label   = ms.process.textfield,
+        #    v_model = None
+        #)
         
         # create the output alert 
         # this component will be used to display information to the end user when you lanch the process
@@ -65,12 +65,12 @@ class ProcessTile(sw.Tile):
         # args are (widget, io, io_attribute_name)
         self.output = sw.Alert() \
             .bind(self.year, self.io, 'year')  \
-            .bind(self.asset, self.io, 'asset')\
             .bind(self.filter, self.io, 'speckle')\
             .bind(self.rfdi, self.io, 'rfdi')\
             .bind(self.ls_mask, self.io, 'ls_mask')\
             .bind(self.dB, self.io, 'dB')
-        
+            #.bind(self.asset, self.io, 'asset')\
+            
         # to launch the process you'll need a btn 
         # here it is as a special sw widget (the message and the icon can also be customized see sepal_ui widget doc)
         self.btn = sw.Btn()
@@ -79,7 +79,7 @@ class ProcessTile(sw.Tile):
         super().__init__(
             id_    = "process_widget", # the id will be used to make the Tile appear and disapear
             title  = ms.process.title, # the Title will be displayed on the top of the tile
-            inputs = [self.year,self.asset,self.filter, self.rfdi, self.ls_mask, self.dB],
+            inputs = [self.year,self.filter, self.rfdi, self.ls_mask, self.dB],#self.asset,
             btn    = self.btn,
             output = self.output
         )
@@ -96,7 +96,7 @@ class ProcessTile(sw.Tile):
         # check that the input that you're gonna use are set (Not mandatory)
         if not self.output.check_input(self.aoi_io.get_aoi_name(), ms.process.no_aoi):       return widget.toggle_loading()
         if not self.output.check_input(self.io.year,               ms.process.no_slider):    return widget.toggle_loading()
-        if not self.output.check_input(self.io.asset,              ms.process.no_textfield): return widget.toggle_loading()
+        #if not self.output.check_input(self.io.asset,              ms.process.no_textfield): return widget.toggle_loading()
         
         
         # Wrap the process in a try/catch statement 
