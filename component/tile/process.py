@@ -29,7 +29,7 @@ class ProcessTile(sw.Tile):
         )
         
         self.filter = v.Select(
-            label   = ms.process.speckle,
+            label   = ms.process.filter,
             v_model = None,
             items = pm.speckle_filters            
         )
@@ -52,11 +52,6 @@ class ProcessTile(sw.Tile):
             v_model = True
         )
         
-        #self.asset  = v.TextField(
-        #    label   = ms.process.textfield,
-        #    v_model = None
-        #)
-        
         # create the output alert 
         # this component will be used to display information to the end user when you lanch the process
         # it's hidden by default 
@@ -65,11 +60,10 @@ class ProcessTile(sw.Tile):
         # args are (widget, io, io_attribute_name)
         self.output = sw.Alert() \
             .bind(self.year, self.io, 'year')  \
-            .bind(self.filter, self.io, 'speckle')\
+            .bind(self.filter, self.io, 'filter')\
             .bind(self.rfdi, self.io, 'rfdi')\
             .bind(self.ls_mask, self.io, 'ls_mask')\
             .bind(self.dB, self.io, 'dB')
-            #.bind(self.asset, self.io, 'asset')\
             
         # to launch the process you'll need a btn 
         # here it is as a special sw widget (the message and the icon can also be customized see sepal_ui widget doc)
@@ -96,7 +90,7 @@ class ProcessTile(sw.Tile):
         # check that the input that you're gonna use are set (Not mandatory)
         if not self.output.check_input(self.aoi_io.get_aoi_name(), ms.process.no_aoi):       return widget.toggle_loading()
         if not self.output.check_input(self.io.year,               ms.process.no_slider):    return widget.toggle_loading()
-        #if not self.output.check_input(self.io.asset,              ms.process.no_textfield): return widget.toggle_loading()
+       
         
         
         # Wrap the process in a try/catch statement 
@@ -117,7 +111,8 @@ class ProcessTile(sw.Tile):
             m = scripts.display_result(
                 self.aoi_io.get_aoi_ee(),
                 dataset,
-                self.result_tile.m
+                self.result_tile.m, 
+                self.io.dB
             )
             
             # change the io values as its a mutable object 

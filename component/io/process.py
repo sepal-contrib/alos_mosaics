@@ -8,11 +8,10 @@ class Process:
         
         # set up your inputs
         self.year   = None
-        self.asset  = None
         self.filter = None
-        self.rfdi = None
-        self.ls_mask = None
-        self.dB = None
+        self.rfdi = True
+        self.ls_mask = True
+        self.dB = True
     
         # set up your outputs
         self.asset_id = None

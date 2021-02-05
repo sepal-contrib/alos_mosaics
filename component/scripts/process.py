@@ -49,7 +49,7 @@ def alos_kc_mosaic(ee_aoi, year, output, mt_speck):
     
     return image
 
-def display_result(ee_aoi,dataset, m):
+def display_result(ee_aoi, dataset, m, db):
         
     # AOI borders in blue 
     empty   = ee.Image().byte()
@@ -60,7 +60,10 @@ def display_result(ee_aoi,dataset, m):
     
     # Add objects
     m.addLayer(outline, {'palette': v.theme.themes.dark.info}, 'aoi')
-    m.addLayer(dataset, pm.VisParam , ms.process.alos_mosaic) 
+    if db:
+        m.addLayer(dataset, pm.VisParam , ms.process.alos_mosaic) 
+    else:
+        m.addLayer(dataset, pm.VisParamPow , ms.process.alos_mosaic) 
        
     return m
     

@@ -9,7 +9,7 @@ years = [2007, 2008, 2009, 2010, 2015, 2016, 2017]
 
 # speckle filters to select from
 speckle_filters = [
-    {'text': 'No Speckle_filter', 'value': 'NONE'}, 
-    {'text': 'Refined Lee', 'value': 'REFINED_LEE'},
+    {'text': 'No Speckle filter', 'value': 'NONE'}, 
+    {'text': 'Refined Lee (zoom dependent)', 'value': 'REFINED_LEE'},
     {'text': 'Quegan Filter', 'value': 'QUEGAN'}
 ]
