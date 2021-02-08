@@ -25,7 +25,7 @@ class ProcessTile(sw.Tile):
         self.year   = v.Select(
             label   = ms.process.slider,
             v_model = None,
-            items   = pm.years
+            items   = pm.years[::-1]
         )
         
         self.filter = v.Select(
