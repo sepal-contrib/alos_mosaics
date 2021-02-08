@@ -21,7 +21,8 @@ class ResultTile(sw.Tile):
         
         # add a btn and a map 
         self.m = sm.SepalMap()
-        self.btn = sw.Btn('export to asset', 'mdi-download', disabled=True, class_='ma-5')
+        self.asset_btn = sw.Btn('export to asset', 'mdi-download', disabled=True, class_='ma-5')
+        self.sepal_btn = sw.Btn('export to sepal', 'mdi-download', disabled = True, class_='ma-5')
         
         # note that btn and output are not a madatory attributes 
         super().__init__(
@@ -29,11 +30,11 @@ class ResultTile(sw.Tile):
             title = ms.result.title,
             inputs = [self.m],
             output = self.output,
-            btn = self.btn
+            btn = v.Layout(row=True, children = [self.asset_btn, self.sepal_btn])
         )
         
         #link the btn 
-        self.btn.on_event('click', self._on_click)
+        self.asset_btn.on_event('click', self._on_click)
         
     def _on_click(self, widget, data, event):
         

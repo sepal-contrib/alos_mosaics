@@ -88,11 +88,9 @@ class ProcessTile(sw.Tile):
         widget.toggle_loading()
             
         # check that the input that you're gonna use are set (Not mandatory)
-        if not self.output.check_input(self.aoi_io.get_aoi_name(), ms.process.no_aoi):       return widget.toggle_loading()
-        if not self.output.check_input(self.io.year,               ms.process.no_slider):    return widget.toggle_loading()
+        if not self.output.check_input(self.aoi_io.get_aoi_name(), ms.process.no_aoi): return widget.toggle_loading()
+        if not self.output.check_input(self.io.year, ms.process.no_slider): return widget.toggle_loading()
        
-        
-        
         # Wrap the process in a try/catch statement 
         try:
             
@@ -120,7 +118,8 @@ class ProcessTile(sw.Tile):
             self.io.dataset = dataset
             
             # release the export btn
-            self.result_tile.btn.disabled = False
+            self.result_tile.asset_btn.disabled = False
+            self.result_tile.sepal_btn.disabled = False
             
             # conclude the computation with a message
             self.output.add_live_msg(ms.process.end_computation, 'success')
