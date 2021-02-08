@@ -32,5 +32,12 @@
     "result": {
         "title": "Results",
         "no_result": "No result to display yet"
+    },
+    "download": {
+        "merge_tile": "Merging the tile from Gdrive",
+        "completed": "Download completed",
+        "file_exist": "The file {} is already available on your computer",
+        "start_download": "Start the exportation of your maps",
+        "remove_gdrive": "Remove the files from your Gdrive folder"
     }
 }

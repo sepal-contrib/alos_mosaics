@@ -34,15 +34,15 @@ class ResultTile(sw.Tile):
         )
         
         #link the btn 
-        self.asset_btn.on_event('click', self._on_click)
+        self.asset_btn.on_event('click', self._on_asset_click)
         
-    def _on_click(self, widget, data, event):
+    def _on_asset_click(self, widget, data, event):
         
         widget.toggle_loading()
         
         try:
             # export the results 
-            asset_id = export_result(
+            asset_id = export_to_asset(
                 self.aoi_io, 
                 self.io.dataset, 
                 self.io.asset, 
@@ -51,6 +51,26 @@ class ResultTile(sw.Tile):
         
             # display a message 
             self.output.add_live_msg(ms.process.task_launched.format(asset_id), 'success')
+        
+        except Exception as e:
+            self.output.add_live_msg(str(e), 'error')
+            
+        widget.toggle_loading()
+        
+        return
+    
+    def _on_sepal_click(self, widget, data, event):
+        
+        widget.toggle_loading()
+        
+        try:
+            # export the results 
+            asset_id = export_to_sepal(
+                self.aoi_io, 
+                self.io.dataset, 
+                self.io.asset, 
+                self.output
+            )
         
         except Exception as e:
             self.output.add_live_msg(str(e), 'error')

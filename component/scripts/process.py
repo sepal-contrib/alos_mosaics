@@ -18,6 +18,8 @@ from component.message import ms
 from component import parameter as pm
 
 from .filters import *
+from .gee import *
+from .gdrive import *
 
 ee.Initialize()
 
@@ -50,7 +52,18 @@ def alos_kc_mosaic(ee_aoi, year, output, mt_speck):
     return image
 
 def display_result(ee_aoi, dataset, m, db):
+    """
+    Display the results on the map 
+    
+    Args:
+        ee_aoi: (ee.Geometry): the geometry of the aoi
+        dataset (ee.Image): the image the display
+        m (sw.SepalMap): the map used for the display
+        db (bool): either to use the db scale or not
         
+    Return:
+        (sw.SepalMap): the map with the different layers added
+    """
     # AOI borders in blue 
     empty   = ee.Image().byte()
     outline = empty.paint(featureCollection = ee_aoi, color = 1, width = 3)
@@ -68,8 +81,20 @@ def display_result(ee_aoi, dataset, m, db):
     return m
     
 
-def export_result(aoi_io, dataset, filename, output):
+def export_to_asset(aoi_io, dataset, filename, output):
+    """
+    Export the dataset as an asset in GEE
     
+     Args: 
+        aoi_io (sw.Aoi_io): the aoi to clip on
+        dataset (ee.Image): the image to export 
+        filename (str): the name of the final file
+        output (sw.Alert): the alert used to display informations to the end user
+        
+    return: 
+        (str): asset link
+        
+    """
     # get the root folder of the user 
     folder = Path(ee.data.getAssetRoots()[0]['id'])
     asset_name = folder.joinpath(filename)
@@ -91,5 +116,55 @@ def export_result(aoi_io, dataset, filename, output):
     # tell me if you want to display the exportation status live or not
     
     return asset_name
+
+def export_to_sepal(aoi_io, dataset, filename, output):
+    """
+    Export the dataset to gdrive and then to sepal. All buffer files will be deleted
+    
+    Args: 
+        aoi_io (sw.Aoi_io): the aoi to clip on
+        dataset (ee.Image): the image to export 
+        filename (str): the name of the final file
+        output (sw.Alert): the alert used to display informations to the end user
+        
+    return: 
+        (str): download pathname
+        
+    """
+    
+    output.add_live_msg(ms.download.start_download)
+    
+    # get the root folder of the user 
+    folder = Path(ee.data.getAssetRoots()[0]['id'])
+    asset_name = folder.joinpath(filename)
+        
+    # load the drive_handler
+    drive_handler = gdrive()
+    
+    # clip the image
+    dataset = dataset.clip(aoi_io.get_aoi_ee())
+        
+    # download the tiled files
+    downloads = drive_handler.download_to_disk(filename, dataset, aoi_io, output)
+        
+    # wait for the end of the download process
+    if downloads:
+        wait_for_completion([filename], output)
+    output.add_live_msg(ms.gee.tasks_completed, 'success') 
+    
+    # create merge name 
+    filename_merge = pm.result_dir.joinpath(f'{filename}_merge.tif')
+
+    # digest the tiles
+    digest_tiles(aoi_io, filename, pm.result_dir, output, filename_merge)
+        
+    output.add_live_msg(ms.download.remove_gdrive)
+    # remove the files from drive
+    drive_handler.delete_files(drive_handler.get_files(filename))
+        
+    # display msg 
+    output.add_live_msg(ms.download.completed, 'success')
+
+    return filename_merge
     
     
