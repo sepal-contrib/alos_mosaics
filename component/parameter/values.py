@@ -15,7 +15,21 @@ speckle_filters = [
 ]
 
 # name of the file in the output directory 
-def asset_name(aoi_name, year):
+def asset_name(aoi_io, io):
     """return the standard name of your asset/file"""
     
-    return f"alos_mosaic_{aoi_name}_{year}"
+    filename = f"alos_mosaic_{aoi_io.get_aoi_name()}_{io.year}"
+    
+    if io.filter != 'NONE':
+        filename += f"_{io.filter.lower()}"
+        
+    if io.rfdi:
+        filename += '_rfdi'
+        
+    if io.ls_mask:
+        filename += '_masked'
+        
+    if io.dB:
+        filename += '_dB'
+    
+    return filename

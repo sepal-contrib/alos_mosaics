@@ -49,7 +49,7 @@ class ResultTile(sw.Tile):
             asset_id = export_to_asset(
                 self.aoi_io, 
                 self.io.dataset, 
-                cp.asset_name(self.aoi_io.get_aoi_name(), self.io.year), 
+                cp.asset_name(self.aoi_io, self.io), 
                 self.output
             )
         
@@ -71,7 +71,7 @@ class ResultTile(sw.Tile):
             pathname = export_to_sepal(
                 self.aoi_io, 
                 self.io.dataset, 
-                cp.asset_name(self.aoi_io.get_aoi_name(), self.io.year), 
+                cp.asset_name(self.aoi_io, self.io), 
                 self.output
             )
             
