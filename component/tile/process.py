@@ -60,10 +60,10 @@ class ProcessTile(sw.Tile):
         # args are (widget, io, io_attribute_name)
         self.output = sw.Alert() \
             .bind(self.year, self.io, 'year')  \
-            .bind(self.filter, self.io, 'filter')\
-            .bind(self.rfdi, self.io, 'rfdi')\
-            .bind(self.ls_mask, self.io, 'ls_mask')\
-            .bind(self.dB, self.io, 'dB')
+            .bind(self.filter, self.io, 'filter') \
+            .bind(self.rfdi, self.io, 'rfdi') \
+            .bind(self.ls_mask, self.io, 'ls_mask') \
+            .bind(self.dB, self.io, 'dB') \
             
         # to launch the process you'll need a btn 
         # here it is as a special sw widget (the message and the icon can also be customized see sepal_ui widget doc)

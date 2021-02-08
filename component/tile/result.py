@@ -6,6 +6,7 @@ import ipyvuetify as v
 
 from component.message import ms
 from component.scripts import * 
+from component import parameter as cp
 
 # create an empty result tile that will be filled with displayable plot, map, links, text
 class ResultTile(sw.Tile):
@@ -45,7 +46,7 @@ class ResultTile(sw.Tile):
             asset_id = export_to_asset(
                 self.aoi_io, 
                 self.io.dataset, 
-                self.io.asset, 
+                cp.asset_name(self.aoi_io.get_aoi_name(), self.io.year), 
                 self.output
             )
         
@@ -68,7 +69,7 @@ class ResultTile(sw.Tile):
             asset_id = export_to_sepal(
                 self.aoi_io, 
                 self.io.dataset, 
-                self.io.asset, 
+                cp.asset_name(self.aoi_io.get_aoi_name(), self.io.year), 
                 self.output
             )
         

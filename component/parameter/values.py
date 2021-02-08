@@ -13,3 +13,9 @@ speckle_filters = [
     {'text': 'Refined Lee (zoom dependent)', 'value': 'REFINED_LEE'},
     {'text': 'Quegan Filter', 'value': 'QUEGAN'}
 ]
+
+# name of the file in the output directory 
+def asset_name(aoi_name, year):
+    """return the standard name of your asset/file"""
+    
+    return f"alos_mosaic_{aoi_name}_{year}"
