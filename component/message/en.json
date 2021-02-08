@@ -31,13 +31,17 @@
     },
     "result": {
         "title": "Results",
-        "no_result": "No result to display yet"
+        "no_result": "No result to display yet",
+        "asset_btn": "Export to asset",
+        "sepal_btn": "Export to sepal",
+        "down_btn": "Download tif file",
+        "file_exist": "The file {} already exist in your sepal folder"
     },
     "download": {
         "merge_tile": "Merging the tile from Gdrive",
         "completed": "Download completed",
         "file_exist": "The file {} is already available on your computer",
-        "start_download": "Start the exportation of your maps",
+        "start_download": "Start the exportation of your map",
         "remove_gdrive": "Remove the files from your Gdrive folder"
     },
      "gdrive": {
@@ -49,6 +53,7 @@
     "gee": {
         "status": "Status: {}",
         "tasks_completed": "GEE task are completed",
-        "add_layer": "Loading the layer ({}) on the map"
+        "add_layer": "Loading the layer ({}) on the map",
+        "asset_exist": "The asset {} already exist in you Google account"
     }
 }

@@ -22,9 +22,9 @@ class ResultTile(sw.Tile):
         
         # add the widgets 
         self.m = sm.SepalMap()
-        self.asset_btn = sw.Btn('export to asset', 'mdi-download', disabled=True, class_='ma-5')
-        self.sepal_btn = sw.Btn('export to sepal', 'mdi-download', disabled = True, class_='ma-5')
-        self.download_image = sw.DownloadBtn("download tif")
+        self.asset_btn = sw.Btn(ms.result.asset_btn, 'mdi-download', disabled=True, class_='ma-5')
+        self.sepal_btn = sw.Btn(ms.result.sepal_btn, 'mdi-download', disabled = True, class_='ma-5')
+        self.download_image = sw.DownloadBtn(ms.result.down_btn)
         
         # note that btn and output are not a madatory attributes 
         super().__init__(

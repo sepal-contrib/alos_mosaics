@@ -99,12 +99,12 @@ def export_to_asset(aoi_io, dataset, filename, output):
     
     # check if the asset already exist
     if is_asset(str(asset_name)):
-        output.add_live_msg(f'The asset {asset_name} already exist in you Google account', 'warning')
+        output.add_live_msg(ms.gee.asset_exist.format(asset_name), 'warning')
         return asset_name
     
     # launch the export
     task_config = {
-        'image': dataset.float(),
+        'image': dataset,
         'description': filename,
         'assetId': str(asset_name),
         'scale': 30, # we need to change this scale for big surfaces 
@@ -141,7 +141,7 @@ def export_to_sepal(aoi_io, dataset, filename, output):
     # create merge name 
     filename_merge = pm.result_dir.joinpath(f'{filename}_merge.tif')
     if filename_merge.is_file():
-        output.add_live_msg(f'The file {filename_merge} already exist in your sepal folder', 'warning')
+        output.add_live_msg(ms.result.file_exist.format(filename_merge), 'warning')
         return filename_merge
     
     output.add_live_msg(ms.download.start_download)
