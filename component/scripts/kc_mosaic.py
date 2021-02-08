@@ -89,10 +89,10 @@ def create(
             image.normalizedDifference(['HH', 'HV']).rename('RFDI')
         )
 
-    if texture:
+    if add_texture:
         texture_hh = image_100.select('HH').glcmTexture({size: 7})
         texture_hv = image_100.select('HV').glcmTexture({size: 7})
-        image = image.addBands(texture_hh.select('HH_var', 'HH_idm', 'HH_diss'))
+        image = image.addBands(texture_hh.select('HH_var', 'HH_idm', 'HH_diss'))\
                      .addBands(texture_hv.select('HV_var', 'HV_idm', 'HV_diss'))
         
     if db:
@@ -105,6 +105,8 @@ def create(
     output.add_live_msg(ms.process.end_computation, 'success')
     
     nameOfBands = image.bandNames().getInfo()
-    nameOfBands.remove(['qa', 'date', 'angle'])
+    nameOfBands.remove('qa')
+    nameOfBands.remove('date')
+    nameOfBands.remove('angle')
 
     return image.select(nameOfBands).clip(region)
