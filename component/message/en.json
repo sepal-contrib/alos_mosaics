@@ -39,5 +39,16 @@
         "file_exist": "The file {} is already available on your computer",
         "start_download": "Start the exportation of your maps",
         "remove_gdrive": "Remove the files from your Gdrive folder"
+    },
+     "gdrive": {
+        "already_done" : "{} was already completed",
+        "error": {
+            "no_file": "The files are not available in your Gdrive"
+        }
+    },
+    "gee": {
+        "status": "Status: {}",
+        "tasks_completed": "GEE task are completed",
+        "add_layer": "Loading the layer ({}) on the map"
     }
 }

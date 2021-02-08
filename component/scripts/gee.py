@@ -50,5 +50,28 @@ def search_task(task_descripsion):
             
     return current_task
 
+def is_asset(asset_id):
+    """
+    Return if the asset already exist or not 
+    
+    Args:
+        asset_id (str): the asset name
+        
+    Returns:
+        (bool): either if the asset exists or not
+    """
+    
+    # get the asset list
+    folder = ee.data.getAssetRoots()[0]['id']  # maybe not the most elegant way
+    assets = ee.data.listAssets({'parent': folder})
+    asset_ids = [asset['id'] for asset in assets['assets']]
+    
+    # remove the legacy folder from asset_id 
+    asset_id = asset_id.replace('projects/earthengine-legacy/assets/', '')
+    
+    return asset_id in asset_ids
+    
+    
+
 
 

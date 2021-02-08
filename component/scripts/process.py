@@ -20,6 +20,7 @@ from component import parameter as pm
 from .filters import *
 from .gee import *
 from .gdrive import *
+from .download import digest_tiles
 
 ee.Initialize()
 
@@ -41,10 +42,7 @@ def alos_kc_mosaic(ee_aoi, year, output, mt_speck):
     image = toDb(ee.Image(image))
     
     # add ratio band
-    image = image.addBands(image.select('HH').subtract(image.select('HV')).rename('HHHV_ratio'));
-    
-    # fake the loading of something so that the user see the btn spining
-    time.sleep(0.1)
+    image = image.addBands(image.select('HH').subtract(image.select('HV')).rename('HHHV_ratio'))
     
     # let the user know that you managed to do something
     output.add_live_msg(ms.process.end_computation, 'success')
@@ -98,9 +96,15 @@ def export_to_asset(aoi_io, dataset, filename, output):
     # get the root folder of the user 
     folder = Path(ee.data.getAssetRoots()[0]['id'])
     asset_name = folder.joinpath(filename)
+    
+    # check if the asset already exist
+    if is_asset(str(asset_name)):
+        output.add_live_msg(f'The asset {asset_name} already exist in you Google account', 'warning')
+        return asset_name
+    
     # launch the export
     task_config = {
-        'image': dataset,
+        'image': dataset.float(),
         'description': filename,
         'assetId': str(asset_name),
         'scale': 30, # we need to change this scale for big surfaces 
@@ -111,7 +115,7 @@ def export_to_asset(aoi_io, dataset, filename, output):
     task = ee.batch.Export.image.toAsset(**task_config)
     task.start()
        
-    output.add_live_msg(ms.process.task_start)
+    output.add_live_msg(ms.process.task_start.format(asset_name), 'success')
     
     # tell me if you want to display the exportation status live or not
     
@@ -131,6 +135,14 @@ def export_to_sepal(aoi_io, dataset, filename, output):
         (str): download pathname
         
     """
+    # create the result_dir 
+    pm.result_dir.mkdir(exist_ok=True)
+    
+    # create merge name 
+    filename_merge = pm.result_dir.joinpath(f'{filename}_merge.tif')
+    if filename_merge.is_file():
+        output.add_live_msg(f'The file {filename_merge} already exist in your sepal folder', 'warning')
+        return filename_merge
     
     output.add_live_msg(ms.download.start_download)
     
@@ -145,15 +157,12 @@ def export_to_sepal(aoi_io, dataset, filename, output):
     dataset = dataset.clip(aoi_io.get_aoi_ee())
         
     # download the tiled files
-    downloads = drive_handler.download_to_disk(filename, dataset, aoi_io, output)
+    downloads = drive_handler.download_to_disk(filename, dataset.float(), aoi_io, output)
         
     # wait for the end of the download process
     if downloads:
         wait_for_completion([filename], output)
     output.add_live_msg(ms.gee.tasks_completed, 'success') 
-    
-    # create merge name 
-    filename_merge = pm.result_dir.joinpath(f'{filename}_merge.tif')
 
     # digest the tiles
     digest_tiles(aoi_io, filename, pm.result_dir, output, filename_merge)

@@ -20,26 +20,29 @@ class ResultTile(sw.Tile):
         # create an output alert 
         self.output = sw.Alert()
         
-        # add a btn and a map 
+        # add the widgets 
         self.m = sm.SepalMap()
         self.asset_btn = sw.Btn('export to asset', 'mdi-download', disabled=True, class_='ma-5')
         self.sepal_btn = sw.Btn('export to sepal', 'mdi-download', disabled = True, class_='ma-5')
+        self.download_image = sw.DownloadBtn("download tif")
         
         # note that btn and output are not a madatory attributes 
         super().__init__(
             id_ = "result_widget",
             title = ms.result.title,
-            inputs = [self.m],
+            inputs = [self.download_image, self.m],
             output = self.output,
             btn = v.Layout(row=True, children = [self.asset_btn, self.sepal_btn])
         )
         
         #link the btn 
         self.asset_btn.on_event('click', self._on_asset_click)
+        self.sepal_btn.on_event('click', self._on_sepal_click)
         
     def _on_asset_click(self, widget, data, event):
         
         widget.toggle_loading()
+        self.sepal_btn.toggle_loading()
         
         try:
             # export the results 
@@ -50,32 +53,35 @@ class ResultTile(sw.Tile):
                 self.output
             )
         
-            # display a message 
-            self.output.add_live_msg(ms.process.task_launched.format(asset_id), 'success')
-        
         except Exception as e:
             self.output.add_live_msg(str(e), 'error')
             
         widget.toggle_loading()
+        self.sepal_btn.toggle_loading()
         
         return
     
     def _on_sepal_click(self, widget, data, event):
         
         widget.toggle_loading()
+        self.asset_btn.toggle_loading()
         
         try:
             # export the results 
-            asset_id = export_to_sepal(
+            pathname = export_to_sepal(
                 self.aoi_io, 
                 self.io.dataset, 
                 cp.asset_name(self.aoi_io.get_aoi_name(), self.io.year), 
                 self.output
             )
+            
+            # link it in the download btn 
+            self.download_image.set_url(str(pathname))
         
         except Exception as e:
             self.output.add_live_msg(str(e), 'error')
             
         widget.toggle_loading()
+        self.asset_btn.toggle_loading()
         
         return
