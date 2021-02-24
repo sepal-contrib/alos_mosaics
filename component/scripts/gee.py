@@ -1,10 +1,10 @@
 import time
 
 import ee 
-
+ee.Initialize()
 from component.message import ms
 
-ee.Initialize()
+
 
 #messages 
 STATUS = "Status : {0}"

@@ -1,16 +1,7 @@
-import time
 import ee
 from . import _quegan, _refined_lee
 
-import ipyvuetify as v
-
-from matplotlib import pyplot as plt
-from ipywidgets import Output
-
-from sepal_ui.mapping import SepalMap
-
 from component.message import ms
-from component import parameter as pm
 
 def create(
         region,
@@ -19,9 +10,6 @@ def create(
         speckle_filter='NONE',
         speckle_filter_dict={'radius': 30, 'units': 'meters'},
         ls_mask=True,
-        add_ratio=True,
-        add_rfdi=True,
-        add_texture=False,
         db=True
 ):
 
@@ -79,34 +67,41 @@ def create(
     if ls_mask:
         image = mask_ls(image)
 
-    if add_ratio:
-        image = image.addBands(
-            image.select('HH').divide(image.select('HV')).rename('HHHV_ratio')
-        )
+    
+    image = image.addBands(
+        image.select('HH').divide(image.select('HV')).rename('HHHV_ratio')
+    )
 
-    if add_rfdi:
-        image = image.addBands(
-            image.normalizedDifference(['HH', 'HV']).rename('RFDI')
-        )
+    
+    image = image.addBands(
+        image.normalizedDifference(['HH', 'HV']).rename('RFDI')
+    )
 
-    if add_texture:
-        texture_hh = image_100.select('HH').glcmTexture({size: 7})
-        texture_hv = image_100.select('HV').glcmTexture({size: 7})
-        image = image.addBands(texture_hh.select('HH_var', 'HH_idm', 'HH_diss'))\
-                     .addBands(texture_hv.select('HV_var', 'HV_idm', 'HV_diss'))
-        
+    
+    image_100 = image.select(['HH', 'HV']).multiply(ee.Image(100)).toInt16()
+    texture_hh = image_100.select('HH').glcmTexture(7)
+    texture_hv = image_100.select('HV').glcmTexture(7)
+    image = image.addBands(texture_hh.select('HH_var', 'HH_idm', 'HH_diss'))\
+                 .addBands(texture_hv.select('HV_var', 'HV_idm', 'HV_diss'))
+
     if db:
         image = to_db(image)
 
-    # fake the loading of something so that the user see the btn spining
-    time.sleep(0.1)
-    
     # let the user know that you managed to do something
     output.add_live_msg(ms.process.end_computation, 'success')
-    
-    nameOfBands = image.bandNames().getInfo()
-    nameOfBands.remove('qa')
-    nameOfBands.remove('date')
-    nameOfBands.remove('angle')
 
-    return image.select(nameOfBands).clip(region)
+    # add fnf band
+    fnf_image = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/FNF').filter(
+                ee.Filter.date(str(year) + '-01-01', str(year) + '-12-31')
+            ).first().rename('fnf_' + str(year))    
+    
+    image = image.addBands(fnf_image)
+
+    # remove aux bands if not explicetly set to True
+    #if not aux:
+    #    nameOfBands = image.bandNames().getInfo()
+    #    nameOfBands.remove('qa')
+    #    nameOfBands.remove('date')
+    #    nameOfBands.remove('angle')
+    
+    return image.clip(region)

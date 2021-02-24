@@ -12,14 +12,15 @@ from component import parameter as pm
 # if you want to create extra reusable object, you can define them in an extra widget.py file 
 class ProcessTile(sw.Tile):
     
-    def __init__(self, io, aoi_io, result_tile, **kwargs):
+    def __init__(self, io, aoi_io, viz_tile, export_tile, **kwargs):
         
         # Define the io and the aoi_io as class attribute so that they can be manipulated in its custom methods
         self.io = io 
         self.aoi_io = aoi_io
         
         # LINK to the result tile 
-        self.result_tile = result_tile
+        self.viz_tile = viz_tile
+        self.export_tile = export_tile
         
         # WIDGETS
         self.year   = v.Select(
@@ -32,12 +33,6 @@ class ProcessTile(sw.Tile):
             label   = ms.process.filter,
             v_model = None,
             items = pm.speckle_filters            
-        )
-        
-        self.rfdi = v.Switch(
-            class_  = "ml-5",
-            label   = ms.process.rfdi,
-            v_model = True
         )
         
         self.ls_mask = v.Switch(
@@ -61,7 +56,6 @@ class ProcessTile(sw.Tile):
         self.output = sw.Alert() \
             .bind(self.year, self.io, 'year')  \
             .bind(self.filter, self.io, 'filter') \
-            .bind(self.rfdi, self.io, 'rfdi') \
             .bind(self.ls_mask, self.io, 'ls_mask') \
             .bind(self.dB, self.io, 'dB') \
             
@@ -73,7 +67,7 @@ class ProcessTile(sw.Tile):
         super().__init__(
             id_    = "process_widget", # the id will be used to make the Tile appear and disapear
             title  = ms.process.title, # the Title will be displayed on the top of the tile
-            inputs = [self.year,self.filter, self.rfdi, self.ls_mask, self.dB],#self.asset,
+            inputs = [self.year, self.filter, self.ls_mask, self.dB],#self.asset,
             btn    = self.btn,
             output = self.output
         )
@@ -100,29 +94,23 @@ class ProcessTile(sw.Tile):
                 self.io.year,
                 self.output,
                 speckle_filter=self.io.filter,
-                add_rfdi=self.io.rfdi,
                 ls_mask=self.io.ls_mask,
                 db=self.io.dB
-            ) 
-            
-            # Display the map
-            m = scripts.display_result(
-                self.aoi_io.get_aoi_ee(),
-                dataset,
-                self.result_tile.m, 
-                self.io.dB
             )
-            
+
             # change the io values as its a mutable object 
             # useful if the io is used as an input in another tile
             self.io.dataset = dataset
-            
+
             # release the export btn
-            self.result_tile.asset_btn.disabled = False
-            self.result_tile.sepal_btn.disabled = False
-            
+            self.export_tile.asset_btn.disabled = False
+            self.export_tile.sepal_btn.disabled = False
+
             # conclude the computation with a message
             self.output.add_live_msg(ms.process.end_computation, 'success')
+            
+            # launch vizualisation
+            self.viz_tile._on_change(None)
             
         except Exception as e: 
             self.output.add_live_msg(str(e), 'error')

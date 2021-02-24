@@ -9,9 +9,16 @@ class Process:
         # set up your inputs
         self.year   = None
         self.filter = None
-        self.rfdi = True
-        self.ls_mask = True
+        self.scale = 30
         self.dB = True
+        self.ls_mask = True
+        self.backscatter = True
+        self.rfdi = True
+        self.fnf = False
+        self.texture = False
+        self.aux = False
+        self.viz = 'RGB'
+        self.scale = 25
     
         # set up your outputs
         self.asset_id = None

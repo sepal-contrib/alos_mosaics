@@ -100,13 +100,14 @@ class gdrive(object):
         for file in files:
             service.files().delete(fileId=file['id']).execute()
             
-    def download_to_disk(self, filename, image, aoi_io, output):
+    def download_to_disk(self, filename, image, aoi_io, scale, output):
         """download the tile to the GEE disk
         
         Args:
-            filename (str): descripsion of the file
-            image (ee.FeatureCollection): image to export
-            aoi_name (str): Id of the aoi used to clip the image
+            filename (str): description of the file
+            image (ee.Image): image to export
+            aoi_io (str): Id of the aoi used to clip the image
+            scale (str): resolution of image when exported (in meters)
             
         Returns:
             download (bool) : True if a task is running, false if not
@@ -123,7 +124,7 @@ class gdrive(object):
                 task_config = {
                     'image':image.clip(aoi_io.get_aoi_ee()),
                     'description':filename,
-                    'scale': 30,
+                    'scale': scale,
                     'region':aoi_io.get_aoi_ee().geometry(),
                     'maxPixels': 1e13
                 }
