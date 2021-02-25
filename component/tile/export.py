@@ -170,9 +170,9 @@ class ExportTile(sw.Tile):
             
             if fnf_dataset:
                 # export the results 
-                pathname_fnf = scripts.export_to_sepal(
+                pathname = scripts.export_to_sepal(
                     self.aoi_io, 
-                    dataset, 
+                    fnf_dataset, 
                     pm.asset_name(self.aoi_io, self.io, True), 
                     self.io.scale,
                     self.output
