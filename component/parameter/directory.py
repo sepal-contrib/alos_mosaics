@@ -1,3 +1,3 @@
 from pathlib import Path
 
-result_dir = Path('~', 'alos_results').expanduser()
+result_dir = Path().home().joinpath('module_results/alos_kc')
