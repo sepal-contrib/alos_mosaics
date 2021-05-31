@@ -16,33 +16,28 @@ layer_select = [
 
 
 # name of the file in the output directory 
-def asset_name(aoi_io, io, fnf=False):
+def asset_name(aoi_model, model, fnf=False):
     """return the standard name of your asset/file"""
     
-    if fnf: 
+    prefix = "kc_fnf" if fnf else "alos_mosaic"
+    filename = f"{prefix}_{aoi_model.name}_{model.year}"
     
-        filename = f"kc_fnf_{aoi_io.get_aoi_name()}_{io.year}"    
-    
-    else:
-        
-        filename = f"alos_mosaic_{aoi_io.get_aoi_name()}_{io.year}"
+    if model.filter != 'NONE':
+        filename += f"_{model.filter.lower()}"
 
-        if io.filter != 'NONE':
-            filename += f"_{io.filter.lower()}"
+    if model.rfdi:
+        filename += '_rfdi'
 
-        if io.rfdi:
-            filename += '_rfdi'
+    if model.ls_mask:
+        filename += '_masked'
 
-        if io.ls_mask:
-            filename += '_masked'
+    if model.dB:
+        filename += '_dB'
 
-        if io.dB:
-            filename += '_dB'
-            
-        if io.texture:
-            filename += '_texture'
-            
-        if io.aux:
-            filename += '_aux'
+    if model.texture:
+        filename += '_texture'
+
+    if model.aux:
+        filename += '_aux'
 
     return filename

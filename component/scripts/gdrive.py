@@ -100,20 +100,20 @@ class gdrive(object):
         for file in files:
             service.files().delete(fileId=file['id']).execute()
             
-    def download_to_disk(self, filename, image, aoi_io, scale, output):
+    def download_to_disk(self, filename, image, aoi_model, scale, output):
         """download the tile to the GEE disk
         
         Args:
             filename (str): description of the file
             image (ee.Image): image to export
-            aoi_io (str): Id of the aoi used to clip the image
+            aoi_model (sw.AoiModel): Model to describe the aoi
             scale (str): resolution of image when exported (in meters)
             
         Returns:
             download (bool) : True if a task is running, false if not
         """
         
-        def launch_task(filename, image, aoi_io, output):
+        def launch_task(filename, image, aoi_model, output):
             """check if file exist and launch the process if not"""
             
             download = False
@@ -122,10 +122,10 @@ class gdrive(object):
             
             if files == []:
                 task_config = {
-                    'image':image.clip(aoi_io.get_aoi_ee()),
+                    'image':image.clip(aoi_model.feature_collection),
                     'description':filename,
                     'scale': scale,
-                    'region':aoi_io.get_aoi_ee().geometry(),
+                    'region':aoi_model.feature_collection.geometry(),
                     'maxPixels': 1e13
                 }
                 
@@ -139,12 +139,12 @@ class gdrive(object):
         
         task = search_task(filename)
         if not task:
-            download = launch_task(filename, image, aoi_io, output)
+            download = launch_task(filename, image, aoi_model, output)
         else:
             if task.state == 'RUNNING':
                 output.add_live_msg(f'{filename}: {task.state}')
                 download = True
             else: 
-                download = launch_task(filename, image, aoi_io, output)
+                download = launch_task(filename, image, aoi_model, output)
                 
         return download

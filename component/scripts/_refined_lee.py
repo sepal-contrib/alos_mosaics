@@ -1,6 +1,5 @@
 import ee
 
-
 # Refined Lee Filter
 # taken from Guido Lemoines script
 # https:#code.earthengine.google.com/2ef38463ebaf5ae133a478f173fd0ab5
