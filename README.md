@@ -7,9 +7,7 @@ The input are as simple as: an AOI, a year, and some filters. The user will be a
 
 This module is a sepalization of the follwing [script](https://code.earthengine.google.com/3784ea8db0b93bcaa41d1a3ada0c055e) by A. Vollrath.
 
-The process is presented in the bellow video tutorial or in the [SEPAL documentation](#).
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Asc8Nz0B1DI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+The process is presented in the [SEPAL documentation](#).
 
 
 
