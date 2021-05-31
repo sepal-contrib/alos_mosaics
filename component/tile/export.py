@@ -12,11 +12,11 @@ from component import parameter as pm
 # if you want to create extra reusable object, you can define them in an extra widget.py file 
 class ExportTile(sw.Tile):
     
-    def __init__(self, aoi_io, io, **kwargs):
+    def __init__(self, aoi_model, model, **kwargs):
 
-        # gather the io
-        self.aoi_io = aoi_io
-        self.io = io
+        # gather the model
+        self.aoi_model = aoi_model
+        self.model = model
 
         # create an output alert 
         self.output = sw.Alert()
@@ -61,23 +61,22 @@ class ExportTile(sw.Tile):
         # create buttons
         self.asset_btn = sw.Btn(ms.export.asset_btn, 'mdi-download', disabled=True, class_='ma-5')
         self.sepal_btn = sw.Btn(ms.export.sepal_btn, 'mdi-download', disabled=True, class_='ma-5')
-        #self.download_image = sw.DownloadBtn(ms.export.down_btn)
 
         # bindings
-        self.output = sw.Alert() \
-            .bind(self.backscatter, self.io, 'backscatter') \
-            .bind(self.rfdi, self.io, 'rfdi') \
-            .bind(self.texture, self.io, 'texture') \
-            .bind(self.aux, self.io, 'aux') \
-            .bind(self.fnf, self.io, 'fnf') \
-            .bind(self.scale, self.io, 'scale') \
+        self.model \
+            .bind(self.backscatter, 'backscatter') \
+            .bind(self.rfdi, 'rfdi') \
+            .bind(self.texture, 'texture') \
+            .bind(self.aux, 'aux') \
+            .bind(self.fnf, 'fnf') \
+            .bind(self.scale, 'scale')
 
         # note that btn and output are not a madatory attributes 
         super().__init__(
             id_ = "export_widget",
             title = ms.export.title,
             inputs = [self.backscatter, self.rfdi, self.texture, self.aux, self.fnf, self.scale],
-            output = self.output,
+            alert = sw.Alert(),
             btn = v.Layout(row=True, children = [self.asset_btn, self.sepal_btn])
         )
 
@@ -88,27 +87,27 @@ class ExportTile(sw.Tile):
     def _select_layers(self):
         
         dataset = None
-        if self.io.backscatter:
-            dataset = self.io.dataset.select(['HH', 'HV', 'HHHV_ratio'])
-        if self.io.rfdi:
+        if self.model.backscatter:
+            dataset = self.model.dataset.select(['HH', 'HV', 'HHHV_ratio'])
+        if self.model.rfdi:
             if dataset:
-                dataset = dataset.addBands(self.io.dataset.select(['RFDI']))
+                dataset = dataset.addBands(self.model.dataset.select(['RFDI']))
             else:
-                dataset = self.io.dataset.select(['RFDI'])
-        if self.io.texture:
+                dataset = self.model.dataset.select(['RFDI'])
+        if self.model.texture:
             if dataset:
-                dataset = dataset.addBands(self.io.dataset.select(['HH_var', 'HH_idm', 'HH_diss', 'HV_var', 'HV_idm', 'HV_diss']))
+                dataset = dataset.addBands(self.model.dataset.select(['HH_var', 'HH_idm', 'HH_diss', 'HV_var', 'HV_idm', 'HV_diss']))
             else:
-                dataset = self.io.dataset.select(['HH_var', 'HH_idm', 'HH_diss', 'HV_var', 'HV_idm', 'HV_diss'])   
-        if self.io.aux:
+                dataset = self.model.dataset.select(['HH_var', 'HH_idm', 'HH_diss', 'HV_var', 'HV_idm', 'HV_diss'])   
+        if self.model.aux:
             if dataset:
-                dataset = dataset.addBands(self.io.dataset.select(['angle', 'date', 'qa']))
+                dataset = dataset.addBands(self.model.dataset.select(['angle', 'date', 'qa']))
             else:
-                dataset = self.io.dataset.select(['angle', 'date', 'qa'])
+                dataset = self.model.dataset.select(['angle', 'date', 'qa'])
                 
         fnf_dataset = None
-        if self.io.fnf:
-            fnf_dataset = self.io.dataset.select('fnf_' + str(self.io.year))
+        if self.model.fnf:
+            fnf_dataset = self.model.dataset.select(f'fnf_{self.model.year}')
         
         return dataset, fnf_dataset
         
@@ -119,29 +118,29 @@ class ExportTile(sw.Tile):
         
         dataset, fnf_dataset = self._select_layers()
         
-        #try:
-        # export the results
+        try:
+            # export the results
         
-        if dataset: 
-            asset_id = scripts.export_to_asset(
-                self.aoi_io, 
-                dataset, 
-                pm.asset_name(self.aoi_io, self.io),
-                self.io.scale,
-                self.output
-            )
+            if dataset: 
+                asset_id = scripts.export_to_asset(
+                    self.aoi_model, 
+                    dataset, 
+                    pm.asset_name(self.aoi_model, self.model),
+                    self.model.scale,
+                    self.alert
+                )
 
-        if fnf_dataset:
-            asset_id = scripts.export_to_asset(
-                self.aoi_io, 
-                fnf_dataset, 
-                pm.asset_name(self.aoi_io, self.io, True), 
-                self.io.scale, 
-                self.output
-            )
+            if fnf_dataset:
+                asset_id = scripts.export_to_asset(
+                    self.aoi_model, 
+                    fnf_dataset, 
+                    pm.asset_name(self.aoi_model, self.model, True), 
+                    self.model.scale, 
+                    self.alert
+                )
         
-        #except Exception as e:
-        #    self.output.add_live_msg(str(e), 'error')
+        except Exception as e:
+            self.alert.add_live_msg(str(e), 'error')
             
         widget.toggle_loading()
         self.sepal_btn.toggle_loading()
@@ -161,29 +160,25 @@ class ExportTile(sw.Tile):
             if dataset:
                 # export the results 
                 pathname = scripts.export_to_sepal(
-                    self.aoi_io, 
+                    self.aoi_model, 
                     dataset, 
-                    pm.asset_name(self.aoi_io, self.io), 
-                    self.io.scale, 
-                    self.output
+                    pm.asset_name(self.aoi_model, self.model), 
+                    self.model.scale, 
+                    self.alert
                 )
             
             if fnf_dataset:
                 # export the results 
                 pathname = scripts.export_to_sepal(
-                    self.aoi_io, 
+                    self.aoi_model, 
                     fnf_dataset, 
-                    pm.asset_name(self.aoi_io, self.io, True), 
-                    self.io.scale,
-                    self.output
+                    pm.asset_name(self.aoi_model, self.model, True), 
+                    self.model.scale,
+                    self.alert
                 )
-                
-            # link it in the download btn 
-            #self.download_image.set_url(str(pathname))
-            #self.download_image.set_url(str(pathname_fnf))
         
         except Exception as e:
-            self.output.add_live_msg(str(e), 'error')
+            self.alert.add_live_msg(str(e), 'error')
             
         widget.toggle_loading()
         self.asset_btn.toggle_loading()
