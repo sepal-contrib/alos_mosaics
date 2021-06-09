@@ -1,5 +1,6 @@
 import ee
 import ipyvuetify as v
+from sepal_ui import color
 
 from component.message import ms
 from component import parameter as pm
@@ -28,7 +29,7 @@ def display_result(ee_aoi, dataset, m, vis):
     m.zoom_ee_object(ee_aoi.geometry())
     
     # Add objects
-    m.addLayer(outline, {'palette': v.theme.themes.dark.info}, 'aoi')
+    m.addLayer(outline, {'palette': color.info}, 'aoi')
     m.addLayer(dataset, vis, ms.process.alos_mosaic) 
     
     return
