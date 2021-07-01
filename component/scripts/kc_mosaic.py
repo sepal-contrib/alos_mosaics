@@ -91,11 +91,12 @@ def create(
     output.add_live_msg(ms.process.end_computation, 'success')
 
     # add fnf band
-    fnf_image = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/FNF').filter(
-                ee.Filter.date(str(year) + '-01-01', str(year) + '-12-31')
-            ).first().rename('fnf_' + str(year))    
-    
-    image = image.addBands(fnf_image)
+    if year <= 2017:
+            fnf_image = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/FNF').filter(
+                        ee.Filter.date(str(year) + '-01-01', str(year) + '-12-31')
+                    ).first().rename('fnf_' + str(year))    
+
+            image = image.addBands(fnf_image)
 
     # remove aux bands if not explicetly set to True
     #if not aux:
