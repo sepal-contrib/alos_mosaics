@@ -51,9 +51,11 @@ class VisualizationTile(sw.Tile):
             dataset = self.model.dataset.select(['RFDI'])
             viz = pm.visParamRFDI
         elif self.model.viz == 'FNF':
-            dataset = self.model.dataset.select(['fnf_'+ str(self.model.year)])
-            viz = pm.visParamFNF
-            
+            if int(str(self.model.year)) <= 2017:
+                dataset = self.model.dataset.select(['fnf_'+ str(self.model.year)])
+                viz = pm.visParamFNF
+            else:
+                dataset = None
         # Display the map
         display_result(
             self.aoi_model.feature_collection,
