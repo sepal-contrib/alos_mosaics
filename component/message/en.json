@@ -39,7 +39,7 @@
         "rfdi": "Export/Add Radar Forest Degradation Index (RFDI, Mitchard et al. 2012)",
         "texture": "Export/Add GLCM texture layers for HH and HV polarizations (Variance,  Homogeneity, Dissimilarity)",
         "aux": "Export/Add auxiliary metadata layers (Acq. Date, LIA, QA layer)",
-        "fnf": "Export K&C Forest/Non-Forest map (separate file)",
+        "fnf": "Export K&C Forest/Non-Forest map (separate file, available only until 2017)",
         "scale": "Resolution in meters (applies to all layers, minimum 25)",
         "asset_btn": "Export to asset",
         "sepal_btn": "Export to sepal",
