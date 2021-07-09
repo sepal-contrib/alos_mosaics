@@ -106,7 +106,7 @@ class ExportTile(sw.Tile):
                 dataset = self.model.dataset.select(['angle', 'date', 'qa'])
                 
         fnf_dataset = None
-        if self.model.fnf:
+        if self.model.fnf and int(str(self.model.year)) <= 2017:
             fnf_dataset = self.model.dataset.select(f'fnf_{self.model.year}')
         
         return dataset, fnf_dataset

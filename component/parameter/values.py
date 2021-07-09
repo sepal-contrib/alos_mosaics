@@ -1,5 +1,5 @@
 # possible years to select from
-years = [2007, 2008, 2009, 2010, 2015, 2016, 2017]
+years = [2007, 2008, 2009, 2010, 2015, 2016, 2017, 2018, 2019, 2020]
 
 # speckle filters to select from
 speckle_filters = [

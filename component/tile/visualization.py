@@ -50,7 +50,7 @@ class VisualizationTile(sw.Tile):
         elif self.model.viz == 'RFDI':
             dataset = self.model.dataset.select(['RFDI'])
             viz = pm.visParamRFDI
-        elif self.model.viz == 'FNF':
+        elif self.model.viz == 'FNF' and int(str(self.model.year)) <= 2017:
             dataset = self.model.dataset.select(['fnf_'+ str(self.model.year)])
             viz = pm.visParamFNF
             
