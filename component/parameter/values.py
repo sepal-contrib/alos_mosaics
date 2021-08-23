@@ -1,5 +1,6 @@
 # possible years to select from
 years = [2007, 2008, 2009, 2010, 2015, 2016, 2017, 2018, 2019, 2020]
+last_fnf_year = 2017
 
 # speckle filters to select from
 speckle_filters = [
@@ -9,9 +10,9 @@ speckle_filters = [
 ]
 
 layer_select = [
-        {'key': 0, 'label': 'Backscatter RGB (HH, HV, HH/HV power ratio)', 'value': 'RGB'},
-        {'key': 1, 'label': 'Radar Forest Degradation Index (RFDI, Mitchard et al. 2012)', 'value': 'RFDI'},
-        {'key': 2, 'label': 'Forest/Non-Forest', 'value': 'FNF'}
+        {'label': 'Backscatter RGB (HH, HV, HH/HV power ratio)', 'value': 'RGB'},
+        {'label': 'Radar Forest Degradation Index (RFDI, Mitchard et al. 2012)', 'value': 'RFDI'},
+        {'label': 'Forest/Non-Forest (available only until 2017)', 'value': 'FNF'} # fnf need to remain the last one 
     ]
 
 

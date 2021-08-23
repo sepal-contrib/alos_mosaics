@@ -20,7 +20,13 @@ class VisualizationTile(sw.Tile):
         # widgets
         self.visSelect = v.RadioGroup(
             v_model = pm.layer_select[0]['value'],
-            children = [v.Radio(key=e['key'], label=e['label'], value=e['value']) for e in pm.layer_select]
+            children = [
+                v.Radio(
+                    #key=e['key'], 
+                    label=e['label'], 
+                    value=e['value']
+                ) for e in pm.layer_select
+            ]
         )
             
         # add the widgets 
