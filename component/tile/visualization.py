@@ -22,7 +22,7 @@ class VisualizationTile(sw.Tile):
             v_model = pm.layer_select[0]['value'],
             children = [
                 v.Radio(
-                    key=e['key'], 
+                    #key=e['key'], 
                     label=e['label'], 
                     value=e['value']
                 ) for e in pm.layer_select
