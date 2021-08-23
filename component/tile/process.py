@@ -4,6 +4,7 @@
 from sepal_ui import sepalwidgets as sw
 from sepal_ui.scripts import utils as su
 import ipyvuetify as v
+from traitlets import Bool
 
 from component import scripts
 from component.message import ms
@@ -19,32 +20,32 @@ class ProcessTile(sw.Tile):
         self.model = model 
         self.aoi_model = aoi_model
         
-        # LINK to the result tile 
+        # Link to the result tile 
         self.viz_tile = viz_tile
         self.export_tile = export_tile
         
-        # WIDGETS
-        self.year   = v.Select(
-            label   = ms.process.slider,
+        # widgets
+        self.year = v.Select(
+            label = ms.process.slider,
             v_model = None,
-            items   = pm.years[::-1]
+            items = pm.years[::-1]
         )
         
         self.filter = v.Select(
-            label   = ms.process.filter,
+            label = ms.process.filter,
             v_model = None,
             items = pm.speckle_filters            
         )
         
         self.ls_mask = v.Switch(
-            class_  = "ml-5",
-            label   = ms.process.ls_mask,
+            class_ = "ml-5",
+            label = ms.process.ls_mask,
             v_model = True
         )
         
         self.dB = v.Switch(
-            class_  = "ml-5",
-            label   = ms.process.dB,
+            class_ = "ml-5",
+            label = ms.process.dB,
             v_model = True
         )
          
@@ -59,10 +60,10 @@ class ProcessTile(sw.Tile):
         
         # construct the Tile with the widget we have initialized 
         super().__init__(
-            id_    = "process_widget", # the id will be used to make the Tile appear and disapear
+            id_ = "process_widget", # the id will be used to make the Tile appear and disapear
             title  = ms.process.title, # the Title will be displayed on the top of the tile
             inputs = [self.year, self.filter, self.ls_mask, self.dB],#self.asset,
-            btn    = sw.Btn(ms.process.process),
+            btn = sw.Btn(ms.process.process),
             alert = sw.Alert()
         )
         
@@ -72,12 +73,21 @@ class ProcessTile(sw.Tile):
     @su.loading_button(debug=False)
     def _on_run(self, widget, data, event): 
             
-        # toggle the loading button (ensure that the user doesn't launch the process multiple times)
-        widget.toggle_loading()
-            
         # check that the input that you're gonna use are set (Not mandatory)
         if not self.alert.check_input(self.aoi_model.name, ms.process.no_aoi): return widget.toggle_loading()
         if not self.alert.check_input(self.model.year, ms.process.no_slider): return widget.toggle_loading()
+        
+        # enable or diasble the use of fnf
+        no_fnf = self.model.year >= pm.last_fnf_year
+        
+        # change the radio btn for viz 
+        # default to backscatter value
+        self.viz_tile.visSelect.v_model = self.viz_tile.visSelect.children[0].value
+        self.viz_tile.visSelect.children[-1].disabled = no_fnf
+        
+        # change switch value in export
+        self.export_tile.fnf.disabled = no_fnf
+        self.export_tile.fnf.v_model = min(not no_fnf, self.export_tile.fnf.v_model)
             
         # Create the mosaic
         dataset = scripts.create(
@@ -102,9 +112,6 @@ class ProcessTile(sw.Tile):
 
         # launch vizualisation
         self.viz_tile._on_change(None)
-        
-        # release the btn
-        widget.toggle_loading()
         
         return
         
