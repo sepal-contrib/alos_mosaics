@@ -72,9 +72,6 @@ class ProcessTile(sw.Tile):
     @su.loading_button(debug=False)
     def _on_run(self, widget, data, event): 
             
-        # toggle the loading button (ensure that the user doesn't launch the process multiple times)
-        widget.toggle_loading()
-            
         # check that the input that you're gonna use are set (Not mandatory)
         if not self.alert.check_input(self.aoi_model.name, ms.process.no_aoi): return widget.toggle_loading()
         if not self.alert.check_input(self.model.year, ms.process.no_slider): return widget.toggle_loading()
@@ -102,9 +99,6 @@ class ProcessTile(sw.Tile):
 
         # launch vizualisation
         self.viz_tile._on_change(None)
-        
-        # release the btn
-        widget.toggle_loading()
         
         return
         
