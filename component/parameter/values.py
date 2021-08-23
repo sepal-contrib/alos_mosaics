@@ -11,7 +11,7 @@ speckle_filters = [
 layer_select = [
         {'key': 0, 'label': 'Backscatter RGB (HH, HV, HH/HV power ratio)', 'value': 'RGB'},
         {'key': 1, 'label': 'Radar Forest Degradation Index (RFDI, Mitchard et al. 2012)', 'value': 'RFDI'},
-        {'key': 2, 'label': 'Forest/Non-Forest', 'value': 'FNF'}
+        {'key': 2, 'label': 'Forest/Non-Forest (available only until 2017)', 'value': 'FNF'}
     ]
 
 
