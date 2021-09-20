@@ -4,11 +4,12 @@ ALOS Kyoto & Carbon Mosaics by JAXA
 This module have been designed on top of the interactive framework `sepal_ui <https://github.com/12rambau/sepal_ui>`_. it allows the user to extract ALOS K&C mosaics. 
 The input are as simple as: an AOI, a year, and some filters. The user will be able to display the mosaic in an interactive map and export it as a GEE asset and/or a sepal Tif file.
 
-This module is a sepalization of the follwing `script <https://code.earthengine.google.com/3784ea8db0b93bcaa41d1a3ada0c055e>`_ by A. Vollrath`_.
+This module is a sepalization of the follwing `script <https://code.earthengine.google.com/3784ea8db0b93bcaa41d1a3ada0c055e>`_ by A. Vollrath.
 
 The process is done in 3 steps described in the bellow sections and presented in the bellow video tutorial: 
 
 .. youtube:: Asc8Nz0B1DI
+    :align: center
 
 Select an AOI
 -------------
