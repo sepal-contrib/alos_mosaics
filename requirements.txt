@@ -24,3 +24,4 @@ ipyvuetify==1.8.1
 matplotlib==3.1.2
 rasterio==1.1.5
 traitlets==5.1.1
+cryptography>=2.1.4
