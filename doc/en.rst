@@ -9,7 +9,6 @@ This module is a sepalization of the follwing `script <https://code.earthengine.
 The process is done in 3 steps described in the bellow sections and presented in the bellow video tutorial: 
 
 .. youtube:: Asc8Nz0B1DI
-    :align: center
 
 Select an AOI
 -------------
