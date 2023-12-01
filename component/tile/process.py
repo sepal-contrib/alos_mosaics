@@ -10,11 +10,11 @@ from component import scripts
 from component.message import ms
 from component import parameter as pm
 
+
 # the tiles should all be heriting from the sepal_ui Tile object
 # if you want to create extra reusable object, you can define them in an extra widget.py file
 class ProcessTile(sw.Tile):
     def __init__(self, model, aoi_model, viz_tile, export_tile, **kwargs):
-
         # Define the model and the aoi_model as class attribute so that they can be manipulated in its custom methods
         self.model = model
         self.aoi_model = aoi_model
@@ -55,9 +55,8 @@ class ProcessTile(sw.Tile):
         # now that the Tile is created we can link it to a specific function
         self.btn.on_event("click", self._on_run)
 
-    @su.loading_button(debug=False)
+    @su.loading_button()
     def _on_run(self, widget, data, event):
-
         # check that the input that you're gonna use are set (Not mandatory)
         if not self.alert.check_input(self.aoi_model.name, ms.process.no_aoi):
             return widget.toggle_loading()
