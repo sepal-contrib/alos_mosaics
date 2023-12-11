@@ -9,11 +9,11 @@ from component import scripts
 from component.message import ms
 from component import parameter as pm
 
+
 # the tiles should all be heriting from the sepal_ui Tile object
 # if you want to create extra reusable object, you can define them in an extra widget.py file
 class ExportTile(sw.Tile):
     def __init__(self, aoi_model, model, **kwargs):
-
         # gather the model
         self.aoi_model = aoi_model
         self.model = model
@@ -66,19 +66,18 @@ class ExportTile(sw.Tile):
         )
 
         # decorate each function as we are using multiple btns
-        self._on_asset_click = su.loading_button(
-            self.alert, self.asset_btn, debug=False
-        )(self._on_asset_click)
-        self._on_sepal_click = su.loading_button(
-            self.alert, self.sepal_btn, debug=False
-        )(self._on_sepal_click)
+        self._on_asset_click = su.loading_button(self.alert, self.asset_btn)(
+            self._on_asset_click
+        )
+        self._on_sepal_click = su.loading_button(self.alert, self.sepal_btn)(
+            self._on_sepal_click
+        )
 
         # link the btn
         self.asset_btn.on_event("click", self._on_asset_click)
         self.sepal_btn.on_event("click", self._on_sepal_click)
 
     def _select_layers(self):
-
         dataset = None
         if self.model.backscatter:
             dataset = self.model.dataset.select(["HH", "HV", "HHHV_ratio"])
@@ -113,7 +112,6 @@ class ExportTile(sw.Tile):
         return dataset, fnf_dataset
 
     def _on_asset_click(self, widget, data, event):
-
         dataset, fnf_dataset = self._select_layers()
 
         # export the results
@@ -138,7 +136,6 @@ class ExportTile(sw.Tile):
         return
 
     def _on_sepal_click(self, widget, data, event):
-
         # get selected layers
         dataset, fnf_dataset = self._select_layers()
 
