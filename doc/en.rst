@@ -1,5 +1,7 @@
 ALOS K&C mosaics
 ================
+*Create and manipulate ALOS K&C mosaics*
+
 
 This module allows users to: 
 
