@@ -29,7 +29,7 @@ def export_to_asset(aoi_model, dataset, filename, scale, output):
 
     """
     # get the root folder of the user
-    folder = Path(ee.data.getAssetRoots()[0]["id"])
+    folder = Path(f"projects/{ee.data._cloud_api_user_project}/assets/")
     asset_name = folder.joinpath(filename)
 
     # check if the asset already exist
@@ -82,7 +82,7 @@ def export_to_sepal(aoi_model, dataset, filename, scale, output):
     output.add_live_msg(ms.download.start_download)
 
     # get the root folder of the user
-    folder = Path(ee.data.getAssetRoots()[0]["id"])
+    folder = Path(f"projects/{ee.data._cloud_api_user_project}/assets/")
     asset_name = folder.joinpath(filename)
 
     # load the drive_handler
