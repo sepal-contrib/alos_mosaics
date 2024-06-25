@@ -11,8 +11,6 @@ from .gee import *
 from .gdrive import *
 from .download import digest_tiles
 
-ee.Initialize()
-
 
 def export_to_asset(aoi_model, dataset, filename, scale, output):
     """

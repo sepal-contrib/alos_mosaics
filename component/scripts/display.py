@@ -6,9 +6,6 @@ from component.message import ms
 from component import parameter as pm
 
 
-ee.Initialize()
-
-
 def display_result(ee_aoi, dataset, m, vis):
     """
     Display the results on the map

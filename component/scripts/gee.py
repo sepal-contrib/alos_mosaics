@@ -3,7 +3,6 @@ import time
 
 import ee
 
-ee.Initialize()
 from component.message import ms
 
 
