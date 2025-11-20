@@ -1,0 +1,13 @@
+name: alos_mosaics
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pyproj
+  - gdal
+  - pip
+  - pip:
+    - sepal_ui==2.21.0
+    - git+https://github.com/openforis/earthengine-api.git@v1.1.5rc0
